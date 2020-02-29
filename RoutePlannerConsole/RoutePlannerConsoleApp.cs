@@ -17,6 +17,9 @@ namespace RoutePlannerConsole
             var bern = new WayPoint("Bern", 46.947663, 7.447173);
 
             Console.WriteLine($"Distance between Bern and Tripolis: {tripolis.Distance(bern):F2}");
+
+            Cities city = new Cities();
+            city.ReadCities("../../../files/citiesTestDataLab2.txt");
             Console.ReadKey();
         }
     }
