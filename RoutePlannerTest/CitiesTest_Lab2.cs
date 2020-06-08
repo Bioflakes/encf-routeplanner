@@ -98,6 +98,8 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerTest
             cities.AddCity(new City("Bern", "Schweiz", 75000, 47.4793198, 8.2129669189));
             cities.AddCity(new City("Zurich", "Schweiz", 375000, 47.4793198, 8.2129669189));
             cities.AddCity(new City("Aarau", "Schweiz", 25000, 47.4793198, 8.2129669189));
+            Console.WriteLine("Length of cities array is " + cities.Count);
+            Console.WriteLine("First City is " + cities[0].Name);
 
             Assert.AreEqual("Bern", cities[0].Name);
             Assert.AreEqual("Zurich", cities[1].Name);

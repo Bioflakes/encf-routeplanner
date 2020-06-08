@@ -10,33 +10,40 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
         public List<City> cities;
         public int Count { get; set; }
 
+        public Cities()
+        {
+            cities = new List<City>();
+        }
+
         public City this[int index]
         {
-            get { 
-                if(index >= Count)
+            get {
+                if (index >= Count || index < 0)
                 {
                     throw new ArgumentOutOfRangeException("Index not in range.");
                 }
-                return this.cities[index]; }
+                return cities[index]; }
             set { 
-                if(index >= Count)
+                if(index >= Count || index < 0)
                 {
                     throw new ArgumentOutOfRangeException("Index not in range.");
                 }
-                this.cities[index] = value; }
+                cities[index] = value; }
         }
 
         public int ReadCities(string filename)
         {
-            cities = new List<City>();
+
             int counter = 0;
 
             using (var reader = new StreamReader(filename))
             {
                 string line;
-                while((line = reader.ReadLine()) != null)
+
+                while ((line = reader.ReadLine()) != null)
                 {
                     counter++;
+                    Console.WriteLine("loopin through count " + counter);
                     string[] splitLine = line.Split("\t");
 
                     string name = splitLine[0];
@@ -45,11 +52,16 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
                     double latitude = double.Parse(splitLine[3]);
                     double longitude = double.Parse(splitLine[4]);
 
-                    cities.Add(new City(name, country, population, latitude, longitude));
+                    AddCity(new City(name, country, population, latitude, longitude));
                 }
-                Count = counter;
-                return counter;
             }
+
+            foreach (City c in cities)
+            {
+                Console.WriteLine("found " + c.Name);
+            }
+
+            return counter;
         }
 
         public int AddCity(City city)
@@ -57,6 +69,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             if(city != null)
             {
                 cities.Add(city);
+                Count++;
             }
             return Count;
         }

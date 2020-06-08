@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Globalization;
 
 namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 {
@@ -19,18 +18,25 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 
         public double Distance(WayPoint target)
         {
-            double Radius = 6371;
+            const double rho = 180.0 / Math.PI;
+            const double earthRadius = 6371;
 
-            double TempResult = (Math.Sin(Latitude) * Math.Sin(target.Latitude)) + (Math.Cos(Latitude) * Math.Cos(target.Latitude) * Math.Cos(Longitude - target.Longitude));
-            double Result = Radius * Math.Acos(TempResult);
+            return earthRadius * Math.Acos(
+                       Math.Sin(Latitude / rho)
+                       * Math.Sin(target.Latitude / rho)
+                       + Math.Cos(Latitude / rho)
+                       * Math.Cos(target.Latitude / rho)
+                       * Math.Cos((Longitude - target.Longitude) / rho));
 
-            return Result;
         }
 
         public override string ToString()
         {
-            string output = $"WayPoint: {(Name.Equals("") ? "" : Name) } {Latitude:F2}/{Longitude:F2}";
-            return output;
+            FormattableString outputTempalteString = $"WayPoint: {(string.IsNullOrWhiteSpace(Name) ? string.Empty : Name + " ")}{Latitude:F2}/{Longitude:F2}";
+            return string.Format(
+                CultureInfo.InvariantCulture,
+                outputTempalteString.Format,
+                outputTempalteString.GetArguments());
         }
 
     }

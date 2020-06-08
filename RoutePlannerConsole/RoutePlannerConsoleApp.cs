@@ -10,7 +10,7 @@ namespace RoutePlannerConsole
         {
             Console.WriteLine($"Welcome to RoutePlanner (Version {Assembly.GetExecutingAssembly().GetName().Version}");
 
-            var wayPoint = new WayPoint("Windisch", 47.479319847061966, 8.212966918945312);
+            var wayPoint = new WayPoint("Windisch", 0.564, 0.646);
             Console.WriteLine(wayPoint.ToString());
 
             var tripolis = new WayPoint("Tripolis", 32.886680, 13.190567);
