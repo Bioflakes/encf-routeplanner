@@ -8,7 +8,10 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
     public class Cities
     {
         public List<City> cities;
-        public int Count { get; set; }
+        public int Count 
+        { 
+            get { return cities.Count; }
+        }
 
         public Cities()
         {
@@ -31,6 +34,35 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
                 cities[index] = value; }
         }
 
+
+        public bool FindByCityName(City city)
+        {
+            return city.Name.Equals(cityToFind, StringComparison.InvariantCultureIgnoreCase);
+        }
+        private string cityToFind;
+
+        public City this[string cityName]
+        {
+            get
+            {
+
+                if (string.IsNullOrEmpty(cityName))
+                {
+                    throw new ArgumentNullException("cityName is null");
+                }
+
+                cityToFind = cityName;
+                var city = cities.Find(FindByCityName);
+
+                if (city == null)
+                {
+                    throw new KeyNotFoundException();
+                }
+
+                return city;
+            }
+        }
+
         public int ReadCities(string filename)
         {
 
@@ -43,7 +75,6 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
                 while ((line = reader.ReadLine()) != null)
                 {
                     counter++;
-                    Console.WriteLine("loopin through count " + counter);
                     string[] splitLine = line.Split("\t");
 
                     string name = splitLine[0];
@@ -69,7 +100,6 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             if(city != null)
             {
                 cities.Add(city);
-                Count++;
             }
             return Count;
         }

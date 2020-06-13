@@ -6,21 +6,35 @@ namespace RoutePlannerConsole
 {
     class RoutePlannerConsoleApp
     {
+        public delegate void SaySomething<T>(T name);
         static void Main(string[] args)
         {
             Console.WriteLine($"Welcome to RoutePlanner (Version {Assembly.GetExecutingAssembly().GetName().Version}");
 
-            var wayPoint = new WayPoint("Windisch", 0.564, 0.646);
-            Console.WriteLine(wayPoint.ToString());
+            Cities cities = new Cities();
+            cities.ReadCities("../../../files/citiesTestDataLab2.txt");
 
-            var tripolis = new WayPoint("Tripolis", 32.886680, 13.190567);
-            var bern = new WayPoint("Bern", 46.947663, 7.447173);
+            Links links = new Links(cities);
+            links.ReadLinks("../../../files/linksTestDataLab3.txt");
 
-            Console.WriteLine($"Distance between Bern and Tripolis: {tripolis.Distance(bern):F2}");
-
-            Cities city = new Cities();
-            city.ReadCities("../../../files/citiesTestDataLab2.txt");
             Console.ReadKey();
         }
+
+        static void SayHello(string name)
+        {
+            Console.WriteLine($"Hello {name}");
+        }
+
+        static void SayFuck(string name)
+        {
+            Console.WriteLine($"Fuck {name} also im running some methods ");
+            SayMethodRan();
+        }
+
+        static void SayMethodRan()
+        {
+            Console.WriteLine("Method ran");
+        }
+
     }
 }
