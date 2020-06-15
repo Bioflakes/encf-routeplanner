@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Fhnw.Ecnf.RoutePlanner.RoutePlannerLib.Util;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
-using System.Text;
 
 namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 {
@@ -66,33 +67,31 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
         public int ReadCities(string filename)
         {
 
-            int counter = 0;
-
-            using (var reader = new StreamReader(filename))
+            int count = 0;
+            try
             {
-                string line;
-
-                while ((line = reader.ReadLine()) != null)
+                using (TextReader reader = new StreamReader(filename))
                 {
-                    counter++;
-                    string[] splitLine = line.Split("\t");
+                    foreach (var lineSplit in reader.GetSplittedLines('\t'))
+                    {
+                        cities.Add(new City(
+                            lineSplit[0],
+                            lineSplit[1],
+                            int.Parse(lineSplit[2]),
+                            double.Parse(lineSplit[3], CultureInfo.InvariantCulture),
+                            double.Parse(lineSplit[4], CultureInfo.InvariantCulture)));
 
-                    string name = splitLine[0];
-                    string country = splitLine[1];
-                    int population = int.Parse(splitLine[2]);
-                    double latitude = double.Parse(splitLine[3]);
-                    double longitude = double.Parse(splitLine[4]);
+                        count++;
+                    }
 
-                    AddCity(new City(name, country, population, latitude, longitude));
+                    return count;
                 }
             }
-
-            foreach (City c in cities)
+            catch (Exception e)
             {
-                Console.WriteLine("found " + c.Name);
+                throw new FileNotFoundException("Data File not found", e);
             }
 
-            return counter;
         }
 
         public int AddCity(City city)

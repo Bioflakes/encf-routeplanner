@@ -39,5 +39,13 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
                 outputTempalteString.GetArguments());
         }
 
+        public static WayPoint operator+(WayPoint wp1, WayPoint wp2)
+        {
+            return new WayPoint(wp1.Name, wp1.Latitude + wp2.Latitude, wp1.Longitude + wp2.Longitude);
+        }
+        public static WayPoint operator -(WayPoint wp1, WayPoint wp2)
+        {
+            return new WayPoint(wp1.Name, wp1.Latitude - wp2.Latitude, wp1.Longitude - wp2.Longitude);
+        }
     }
 }
