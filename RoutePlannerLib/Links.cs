@@ -41,6 +41,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 			var previousCount = Count;
 			using (var reader = new StreamReader(filename))
 			{
+
 				foreach (var tokens in reader.GetSplittedLines('\t'))
 				{
 					try
@@ -60,6 +61,10 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 			return Count - previousCount;
 		}
 
+		public City[] FindCities(TransportMode transportMode)
+		{
+			return links.Where(l => l.TransportMode == transportMode).SelectMany(r => new[] { r.FromCity, r.ToCity }).Distinct().ToArray();
+		}
 
 		#region Lab04-Task1a: Dijkstra implementation
 		public List<Link> FindShortestRouteBetween(string fromCity, string toCity, TransportMode mode)
@@ -151,5 +156,15 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 			}
 		}
 		#endregion
+
+		public int GetCountOfThreeBiggestCitiesInLinks()
+		{
+			return links.Count(c => cities.cities.OrderByDescending(p => p.Population).Take(3).Contains(c.FromCity));
+		}
+
+		public int GetCountOfThreeCitiesWithLongestNameInLinks()
+		{
+			return links.Count(c => cities.cities.OrderByDescending(p => p.Name.Length).Take(3).Contains(c.FromCity) || cities.cities.OrderByDescending(p => p.Name.Length).Take(3).Contains(c.ToCity));
+		}
 	}
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 
 namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 {
@@ -66,31 +67,27 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 
         public int ReadCities(string filename)
         {
-
-            int count = 0;
             try
             {
                 using (TextReader reader = new StreamReader(filename))
                 {
-                    foreach (var lineSplit in reader.GetSplittedLines('\t'))
-                    {
-                        cities.Add(new City(
-                            lineSplit[0],
-                            lineSplit[1],
-                            int.Parse(lineSplit[2]),
-                            double.Parse(lineSplit[3], CultureInfo.InvariantCulture),
-                            double.Parse(lineSplit[4], CultureInfo.InvariantCulture)));
-
-                        count++;
-                    }
-
-                    return count;
+                    var citiesAsString = reader.GetSplittedLines('\t')
+                        .Select(i => new City(
+                            i[0],
+                            i[1],
+                            int.Parse(i[2]),
+                            double.Parse(i[3], CultureInfo.InvariantCulture),
+                            double.Parse(i[4], CultureInfo.InvariantCulture)
+                        )).ToArray();
+                    cities.AddRange(citiesAsString);
+                    return citiesAsString.Length;
                 }
             }
             catch (Exception e)
             {
                 throw new FileNotFoundException("Data File not found", e);
             }
+
 
         }
 
@@ -103,20 +100,15 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             return Count;
         }
 
-        public IList<City> FindNeighbours(WayPoint location, double distance) {
-            IList<City> neighbours = new List<City>();
+        public IEnumerable<City> FindNeighbours(WayPoint location, double distance)
+        {
 
-
-
-            foreach(City c in cities)
-            {
-                if (location.Distance(c.Location) < distance)
-                {
-                    neighbours.Add(c);
-                }
-            }
-            return neighbours;
+            return cities.Where(c => location.Distance(c.Location) < distance).ToList();
         }
         
+        public int GetPopulationOfShortestCityNames()
+        {
+            return cities.OrderBy(c => c.Name.Length).Take(3).Sum(c => c.Population);
+        }
     }
 }
