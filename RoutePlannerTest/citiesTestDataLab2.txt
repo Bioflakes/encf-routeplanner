@@ -1,4 +1,4 @@
-Mumbai	India	12383146	18.96	72.82
+Mumbai	India	12383146	18.96	72.81
 Buenos Aires	Argentina	12116379	-34.61	-58.37
 Karachi	Pakistan	10537226	24.86	67.01
 Dhaka	Bangladesh	8942250	23.70	90.39
